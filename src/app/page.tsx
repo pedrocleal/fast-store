@@ -5,6 +5,7 @@ import { Hero } from '@/components/Hero'
 import heroImg from '../assets/danielle-cerullo-CQfNt66ttZM-unsplash.jpg'
 import { ListProducts } from '@/components/ListProducts'
 import { Promo } from '@/components/Promo'
+import { Cart } from '@/components/Cart'
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
         <Image src={heroImg} alt='' className="absolute top-0 left-0 object-cover filter opacity-10 h-full w-full bg-blend-darken" />
       </div>
       <ListProducts />
+      <Cart />
     </main>
   )
 }
