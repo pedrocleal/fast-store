@@ -12,10 +12,14 @@ interface ProducstProps {
 }
 
 import { mockProducts } from "../../mock/products"
+import { IProductProps } from "@/types/product";
+import { useCart } from "@/hooks/useCart";
 
 export function ListProducts() {
-  const [products, setProducts] = useState<ProducstProps[] | any>(mockProducts)
-  const [searchTerm, setSearchTerm] = useState('')
+  const [products, setProducts] = useState<ProducstProps[] | any>(mockProducts);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const { onAddToCart } = useCart();
 
   const filteredProducts = products.filter((product: any) => {
     return product.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -37,7 +41,7 @@ export function ListProducts() {
 
       {filteredProducts.length > 0 && (
         <div className="flex itesm-center justify-center flex-wrap gap-4 w-full md:justify-start">
-          {filteredProducts?.map((product: any) => {
+          {filteredProducts?.map((product: IProductProps) => {
             return (
               <div key={product.id} className="p-4 border-zinc-200 rounded flex flex-col justify-between border max-w-[300px] w-full">
                 <Image src={product.image} alt={product.title} className="shadow rounded max-w-full object-contain p-4 h-60 align-middle border-none" />
@@ -46,7 +50,12 @@ export function ListProducts() {
 
                 <div className="flex flex-col w-full mt-4 gap-2">
                   <button className="bg-gradient-to-r from-sky-500 to-indigo-500 p-1 rounded border text-md hover:bg-cyan-600 transition-colors">Buy now!</button>
-                  <button className="bg-cyan-50 p-1 rounded text-cyan-500 border text-md hover:bg-cyan-100 transition-colors">Add to cart</button>
+                  <button
+                    className="bg-cyan-50 p-1 rounded text-cyan-500 border text-md hover:bg-cyan-100 transition-colors"
+                    onClick={() => onAddToCart(product)}
+                  >
+                    Add to cart
+                  </button>
                 </div>
               </div>
             )

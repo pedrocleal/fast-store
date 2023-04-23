@@ -3,16 +3,22 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { useCart } from '@/hooks/useCart';
+import { CartItem } from './components/CartItem';
+import { IProductProps } from '@/types/product';
 
-export function Cart() {
-  const [open, setOpen] = useState(true);
+export function Cart({ open, setOpen, items }: {
+  open: boolean,
+  setOpen: (open: boolean) => void
+  items: IProductProps[]
+}) {
 
-  const { isCartOpen, setIsCartOpen } = useCart();
+  console.log('cart render')
+
+  // TODO: use context to handle cart state
 
   return (
-    <Transition.Root show={isCartOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setIsCartOpen}>
+    <Transition.Root show={open} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={setOpen}>
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"
@@ -51,7 +57,7 @@ export function Cart() {
                       <button
                         type="button"
                         className="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                        onClick={() => setIsCartOpen(false)}
+                        onClick={() => setOpen(false)}
                       >
                         <span className="sr-only">Close panel</span>
                         <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -61,10 +67,45 @@ export function Cart() {
                   <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
                     <div className="px-4 sm:px-6">
                       <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                        Panel title
+                        Cart
                       </Dialog.Title>
                     </div>
-                    <div className="relative mt-6 flex-1 px-4 sm:px-6">{/* Your content */}</div>
+                    <div className="relative mt-4 flex-1 px-4 sm:px-6">
+                      {/* Replace with your content */}
+                      <small className='text-zinc-700'>Products on your cart:</small>
+
+                      {/* List products */}
+                      <div className='mt-2 flex flex-col gap-4'>
+                        {items.length > 0 && (
+                          <>
+                            {items.map((item) => (
+                              <CartItem
+                                key={item.id}
+                                id={String(item.id)}
+                                name={item.title}
+                                price={item.price}
+                                image={item.image}
+                              />
+                            ))}
+
+                            <div className='flex flex-col mt-12'>
+                              <strong className='text-zinc-700 w-full text-right text-2xl'>Total: {'120,00'}</strong>
+                              <div className='flex flex-col gap-2 mt-4'>
+                                <button className='rounded border w-full p-1 text-zinc-50 bg-cyan-400'>Keep buying</button>
+                                <button className='rounded border w-full p-1 text-cyan-400 bg-zinc-50'>Go to checkout</button>
+                                <button className='rounded border w-full p-1 text-cyan-400 bg-zinc-50' onClick={() => localStorage.removeItem('@FastStore:cart')}>Limpar carrinho</button>
+                              </div>
+                            </div>
+                          </>
+                        )}
+
+                        {items.length === 0 && (
+                          <div className='flex flex-col items-start justify-center'>
+                            <p className='text-zinc-400 font-semibold'>No products on your cart</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
