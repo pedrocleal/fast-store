@@ -8,11 +8,10 @@ import { ListProducts } from '@/components/ListProducts'
 import { Promo } from '@/components/Promo'
 import { Cart } from '@/components/Cart'
 import { useCart } from '@/hooks/useCart'
+import CartProvider from '@/context/CartContext';
 
 export default function Home() {
-  const { cartItems, isCartOpen, setIsCartOpen } = useCart();
-
-  console.log('home render');
+  const { cartItems, ísCartOpen, setIsCartOpen, clearCart } = useCart();
 
   return (
     <main className="flex flex-col items-start font-inter bg-zinc-50 w-full mx-auto">
@@ -20,13 +19,14 @@ export default function Home() {
       <div className='relative w-full bg-zinc-900 rounded-b-2xl'>
         <Header openCart={() => setIsCartOpen(true)} />
         <Hero />
-        <Image src={heroImg} alt='' className="absolute top-0 left-0 object-cover filter opacity-10 h-full w-full bg-blend-darken" />
+        <Image priority src={heroImg} alt='' className="absolute top-0 left-0 object-cover filter opacity-10 h-full w-full bg-blend-darken" />
       </div>
       <ListProducts />
       <Cart
-        open={isCartOpen}
-        setOpen={setIsCartOpen}
+        clearCart={clearCart}
+        open={ísCartOpen}
         items={cartItems}
+        setOpen={setIsCartOpen}
       />
     </main>
   )

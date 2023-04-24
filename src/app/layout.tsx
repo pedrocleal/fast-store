@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
+import CartProvider from '@/context/CartContext'
 
 export const metadata = {
   title: 'Create Next App',
@@ -16,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} scroll-smooth`}>
-        {children}
+        <CartProvider>
+          {children}
+        </CartProvider>
       </body>
     </html>
   )

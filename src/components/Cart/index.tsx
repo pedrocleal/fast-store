@@ -1,20 +1,15 @@
-"use client"
-
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { CartItem } from './components/CartItem';
 import { IProductProps } from '@/types/product';
 
-export function Cart({ open, setOpen, items }: {
+export function Cart({ open, items, setOpen, clearCart }: {
   open: boolean,
   setOpen: (open: boolean) => void
   items: IProductProps[]
+  clearCart: () => void
 }) {
-
-  console.log('cart render')
-
-  // TODO: use context to handle cart state
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -76,7 +71,7 @@ export function Cart({ open, setOpen, items }: {
 
                       {/* List products */}
                       <div className='mt-2 flex flex-col gap-4'>
-                        {items.length > 0 && (
+                        {items?.length > 0 && (
                           <>
                             {items.map((item) => (
                               <CartItem
@@ -85,6 +80,7 @@ export function Cart({ open, setOpen, items }: {
                                 name={item.title}
                                 price={item.price}
                                 image={item.image}
+                                quantity={item.quantity}
                               />
                             ))}
 
@@ -93,13 +89,13 @@ export function Cart({ open, setOpen, items }: {
                               <div className='flex flex-col gap-2 mt-4'>
                                 <button className='rounded border w-full p-1 text-zinc-50 bg-cyan-400'>Keep buying</button>
                                 <button className='rounded border w-full p-1 text-cyan-400 bg-zinc-50'>Go to checkout</button>
-                                <button className='rounded border w-full p-1 text-cyan-400 bg-zinc-50' onClick={() => localStorage.removeItem('@FastStore:cart')}>Limpar carrinho</button>
+                                <button className='rounded border w-full p-1 text-cyan-400 bg-zinc-50' onClick={clearCart}>Limpar carrinho</button>
                               </div>
                             </div>
                           </>
                         )}
 
-                        {items.length === 0 && (
+                        {items?.length === 0 && (
                           <div className='flex flex-col items-start justify-center'>
                             <p className='text-zinc-400 font-semibold'>No products on your cart</p>
                           </div>
