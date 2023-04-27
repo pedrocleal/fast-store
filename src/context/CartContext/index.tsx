@@ -1,11 +1,12 @@
 "use client";
 
 import { IProductProps } from "@/types/product";
-import { createContext, useState } from "react";
+import { Dispatch, SetStateAction, createContext, useEffect, useMemo, useState } from "react";
 
 interface CartContextProps {
   cartItems: IProductProps[];
-  ísCartOpen: boolean;
+  setCartItems: Dispatch<SetStateAction<IProductProps[]>>;
+  isCartOpen: boolean;
   setIsCartOpen: (value: boolean) => void;
   onOpenCart: () => void;
   onAddToCart: (item: IProductProps) => void;
@@ -20,8 +21,7 @@ type CartProviderProps = {
 }
 
 export default function CartProvider({ children }: CartProviderProps) {
-  const [ísCartOpen, setIsCartOpen] = useState(false);
-
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState<IProductProps[]>(() => {
     if (typeof window !== 'undefined') {
       const storagedCart = localStorage.getItem('@FastStore:cart');
@@ -35,9 +35,6 @@ export default function CartProvider({ children }: CartProviderProps) {
 
     return [];
   });
-
-  const itemsPrice = cartItems.map((item) => item.price).reduce((a, b) => a + b, 0);
-  console.log(itemsPrice.toFixed(2));
 
   function addToCart(item: IProductProps) {
 
@@ -72,7 +69,6 @@ export default function CartProvider({ children }: CartProviderProps) {
   }
 
   const handleCartButtonClick = () => {
-    console.log({ ísCartOpen });
     setIsCartOpen(prevState => !prevState);
   }
 
@@ -81,15 +77,20 @@ export default function CartProvider({ children }: CartProviderProps) {
     localStorage.removeItem('@FastStore:cart');
   };
 
+  useEffect(() => {
+    localStorage.setItem('@FastStore:cart', JSON.stringify(cartItems))
+  }, [cartItems]);
+
   return (
     <CartContext.Provider value={{
       cartItems,
-      ísCartOpen,
+      setCartItems,
+      isCartOpen,
       setIsCartOpen,
       onOpenCart: handleCartButtonClick,
       onAddToCart: addToCart,
       onRemoveFromCart: removeFromCart,
-      clearCart
+      clearCart,
     }}>
       {children}
     </CartContext.Provider>

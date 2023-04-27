@@ -20,5 +20,23 @@ export const mockProducts = [
     image: wheyProtein,
     title: 'Whey Protein - Optimum Nutrition',
     price: 99.9,
+  },
+  {
+    id: 3,
+    image: creatineIntegral,
+    title: 'Creatina - Integral',
+    price: 49.9,
+  },
+  {
+    id: 4,
+    image: hipercaloricoMax,
+    title: 'Hipercalórico - Max Titanium',
+    price: 89.9,
+  },
+  {
+    id: 5,
+    image: preTreinoPsychotic,
+    title: 'Pré-Treino - Psychotic',
+    price: 79.9,
   }
 ];

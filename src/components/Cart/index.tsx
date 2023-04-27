@@ -3,6 +3,8 @@ import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { CartItem } from './components/CartItem';
 import { IProductProps } from '@/types/product';
+import { useCart } from '@/hooks/useCart';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 export function Cart({ open, items, setOpen, clearCart }: {
   open: boolean,
@@ -10,6 +12,8 @@ export function Cart({ open, items, setOpen, clearCart }: {
   items: IProductProps[]
   clearCart: () => void
 }) {
+
+  const { itemsPrice } = useCart();
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -85,10 +89,13 @@ export function Cart({ open, items, setOpen, clearCart }: {
                             ))}
 
                             <div className='flex flex-col mt-12'>
-                              <strong className='text-zinc-700 w-full text-right text-2xl'>Total: {'120,00'}</strong>
+                              <strong className='text-zinc-700 w-full text-right text-2xl'>Total: {itemsPrice}</strong>
                               <div className='flex flex-col gap-2 mt-4'>
-                                <button className='rounded border w-full p-1 text-zinc-50 bg-cyan-400'>Keep buying</button>
-                                <button className='rounded border w-full p-1 text-cyan-400 bg-zinc-50'>Go to checkout</button>
+                                <button className='rounded border w-full p-1 text-zinc-50 bg-cyan-400' onClick={() => setOpen(false)}>Keep buying</button>
+
+                                {/* Uncomment this when checkout page is ready */}
+                                {/* <button className='rounded border w-full p-1 text-cyan-400 bg-zinc-50'>Go to checkout</button> */}
+
                                 <button className='rounded border w-full p-1 text-cyan-400 bg-zinc-50' onClick={clearCart}>Limpar carrinho</button>
                               </div>
                             </div>
